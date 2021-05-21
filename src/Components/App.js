@@ -10,6 +10,7 @@ class App extends React.Component {
 
     state = {
         videos: [],
+        allvids: [],
         selectedVideo: null
     }
 
@@ -25,17 +26,26 @@ class App extends React.Component {
         });
 
         this.setState({
+            allvids: response.data.items,
             videos: response.data.items,
+
             selectedVideo: response.data.items[0]
         });
+
+        console.log(this.state.allvids, this.state.videos)
+
     }
 
-    onVideoSelect = (video) => {
+    onVideoSelect = video => {
         this.setState({
-            selectedVideo: video
-        });
-    }
-
+            selectedVideo: video,
+            videos: this.state.allvids
+        }, ()=> {
+            this.setState({
+                videos:this.state.videos.filter(video=>video.id.videoId!==this.state.selectedVideo.id.videoId)
+            })
+        })
+    };
     render() {
         return (
             <div className="ui container">
